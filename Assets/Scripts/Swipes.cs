@@ -1,49 +1,48 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Swipes : MonoBehaviour
 {
-    Vector2 firstPressPos;
-    Vector2 secondPressPos;
-    Vector2 currentSwipe;
+    public delegate void SwipeEvent(Notifications notification);
+    public static event SwipeEvent Swipe;
+
+    private Vector2 FirstPressPosition;
+    private Vector2 SecondPressPosition;
+    private Vector2 CurrentSwipe;
 
     private void Update()
     {
-        Swipe();
+        WaitSwipe();
     }
-    public void Swipe()
+    private void WaitSwipe()
     {
-        if (Input.touches.Length > 0)
+        if (Input.GetMouseButtonDown(0))
+            FirstPressPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        if (Input.GetMouseButtonUp(0)) 
         {
-            Touch t = Input.GetTouch(0);
-            if (t.phase == TouchPhase.Began)
-            {
-                firstPressPos = new Vector2(t.position.x, t.position.y);
-            }
-            if (t.phase == TouchPhase.Ended)
-            {
-                secondPressPos = new Vector2(t.position.x, t.position.y);
-                currentSwipe = new Vector3(secondPressPos.x - firstPressPos.x, secondPressPos.y - firstPressPos.y);
-                currentSwipe.Normalize();
-                if (currentSwipe.y > 0 || currentSwipe.x > -0.5f || currentSwipe.x < 0.5f)
-                {
-                    Debug.Log("up swipe");
-                }
-
-                if (currentSwipe.y < 0 || currentSwipe.x > -0.5f || currentSwipe.x < 0.5f)
-                {
-                    Debug.Log("down swipe");
-                }
-                if (currentSwipe.x < 0 || currentSwipe.y > -0.5f || currentSwipe.y < 0.5f)
-                {
-                    Debug.Log("left swipe");
-                }
-                if (currentSwipe.x > 0 || currentSwipe.y > -0.5f || currentSwipe.y < 0.5f)
-                {
-                    Debug.Log("right swipe");
-                }
-            }
+            SecondPressPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            CurrentSwipe = new Vector2(SecondPressPosition.x - FirstPressPosition.x, SecondPressPosition.y - FirstPressPosition.y);
+            CurrentSwipe.Normalize();
+            Swipe(GetTypeOfSwipe(CurrentSwipe));
         }
+    }
+    private Notifications GetTypeOfSwipe(Vector3 Swipe)
+    {
+        if (Swipe.y > 0 && Swipe.x > -0.5f && Swipe.x < 0.5f)
+        {
+            return Notifications.UP_SWIPE;
+        }
+        if (Swipe.x < 0 && Swipe.y > -0.5f && Swipe.y < 0.5f)
+        {
+            return Notifications.LEFT_SWIPE;
+        }
+        if (Swipe.x > 0 && Swipe.y > -0.5f && Swipe.y < 0.5f)
+        {
+            return Notifications.RIGHT_SWIPE;
+        }
+        if (Swipe.y < 0 && Swipe.x > -0.5f && Swipe.x < 0.5f)
+        {
+            return Notifications.NONE;
+        }
+        return Notifications.NONE;
     }
 }
