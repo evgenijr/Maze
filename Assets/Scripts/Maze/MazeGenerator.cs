@@ -14,9 +14,8 @@ public class MazeGeneratorCell
 }
 public class MazeGenerator
 {
-    public int Width;
-    public int Height;
-    public Vector2 FinishPosition { get; private set; }
+    private int Width;
+    private int Height;
 
     public MazeGenerator(int WidthValue, int HeightValue)
     {
@@ -35,6 +34,14 @@ public class MazeGenerator
             }
         }
 
+        RemoveEdgeWalls(maze);
+        RemoveWallsBacktracking(maze);
+
+        return maze;
+    }
+
+    private void RemoveEdgeWalls(MazeGeneratorCell[,] maze)
+    {
         for (int x = 0; x < maze.GetLength(0); x++)
         {
             maze[x, Height - 1].WallLeft = false;
@@ -44,14 +51,9 @@ public class MazeGenerator
         {
             maze[Width - 1, y].WallBottom = false;
         }
-        RemoveWalls(maze);
-
-        //FinishPosition = PlaceMazeExit(maze);
-
-        return maze;
     }
 
-    private void RemoveWalls(MazeGeneratorCell[,] maze)
+    private void RemoveWallsBacktracking(MazeGeneratorCell[,] maze)
     {
         MazeGeneratorCell current = maze[0, 0];
         current.IsVisited = true;
@@ -76,7 +78,7 @@ public class MazeGenerator
                 int index = r.Next(0, unvisitedNeighbours.Count);
                 MazeGeneratorCell chosen = unvisitedNeighbours[index];
                  
-                RemoveWall(current, chosen);
+                RemoveWallBetween(current, chosen);
 
                 chosen.IsVisited = true;
                 stack.Push(chosen);
@@ -90,17 +92,17 @@ public class MazeGenerator
         } while (stack.Count > 0);
     }
 
-    private void RemoveWall(MazeGeneratorCell a, MazeGeneratorCell b)
+    private void RemoveWallBetween(MazeGeneratorCell FirstWall, MazeGeneratorCell SecondWall)
     {
-        if (a.X == b.X)
+        if (FirstWall.X == SecondWall.X)
         {
-            if (a.Y > b.Y) a.WallBottom = false;
-            else b.WallBottom = false;
+            if (FirstWall.Y > SecondWall.Y) FirstWall.WallBottom = false;
+            else SecondWall.WallBottom = false;
         }
         else
         {
-            if (a.X > b.X) a.WallLeft = false;
-            else b.WallLeft = false;
+            if (FirstWall.X > SecondWall.X) FirstWall.WallLeft = false;
+            else SecondWall.WallLeft = false;
         }
     }
 

@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    public LayerMask mask;
+    public LayerMask ObstacleLayers;
+
     [SerializeField]private float Speed;
-    private Rigidbody2D RigidBody;
 
     private Vector3 Destination;
-    private bool CanMoving = false;
+    private bool CanMoving = true;
+
     private void Start()
     {
-        RigidBody = GetComponent<Rigidbody2D>();
         Destination = transform.position;
         Swipes.Swipe += OnNotify;
     }
@@ -20,7 +20,6 @@ public class PlayerMove : MonoBehaviour
         {
             case Notifications.UP_SWIPE:
                 {
-                    if(!CanMoving)
                     StartMoving();
                     break;
                 }
@@ -31,10 +30,10 @@ public class PlayerMove : MonoBehaviour
     {
         Vector3 NewPosition = transform.position;
         Destination = new Vector3(NewPosition.x, NewPosition.y + 1, NewPosition.z);
-        CanMoving = !Physics2D.Linecast(transform.position, Destination, mask);
+        CanMoving = !Physics2D.Linecast(transform.position, Destination, ObstacleLayers);
         if (CanMoving)
         {
-            RigidBody.MovePosition(Destination);
+            transform.position = Destination;
             CanMoving = false;
         }
     }

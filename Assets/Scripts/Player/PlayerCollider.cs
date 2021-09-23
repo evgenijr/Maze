@@ -1,18 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCollider : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public delegate void PlayerColliderNotifications(Notifications notification);
+    public static event PlayerColliderNotifications TriggerEvent;
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (other.CompareTag("Finish"))
+        {
+            TriggerEvent(Notifications.COLLIDES_FINISH);
+            Debug.Log("Finish");
+        }
     }
 }

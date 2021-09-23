@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class Swipes : MonoBehaviour
 {
-    public delegate void SwipeEvent(Notifications notification);
-    public static event SwipeEvent Swipe;
+    public delegate void SwipeEvents(Notifications notification);
+    public static event SwipeEvents Swipe;
 
     private Vector2 FirstPressPosition;
     private Vector2 SecondPressPosition;
@@ -22,6 +22,7 @@ public class Swipes : MonoBehaviour
             SecondPressPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
             CurrentSwipe = new Vector2(SecondPressPosition.x - FirstPressPosition.x, SecondPressPosition.y - FirstPressPosition.y);
             CurrentSwipe.Normalize();
+
             Swipe(GetTypeOfSwipe(CurrentSwipe));
         }
     }
