@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    [SerializeField]private AudioSource RotateSource;
+    [SerializeField] private AudioSource RotateSource;
     [SerializeField] private AudioSource SwooshSource;
     private void Start()
     {

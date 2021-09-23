@@ -4,5 +4,8 @@ public enum Notifications{
     UP_SWIPE,
     COLLIDES_FINISH,
     NONE,
-    LEVEL_RESTART
+    LEVEL_RESTART,
+    LEVEL_START,
+    START_CLICK,
+    SET_MOVING
 }

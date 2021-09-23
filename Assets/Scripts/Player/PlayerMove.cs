@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    public LayerMask ObstacleLayers;
+    [SerializeField]private LayerMask ObstacleLayers;
 
     [SerializeField]private float Speed;
 
@@ -23,15 +23,33 @@ public class PlayerMove : MonoBehaviour
                     StartMoving();
                     break;
                 }
+            case Notifications.RIGHT_SWIPE:
+                {
+                    CanMoving = false;
+                    break;
+                }
+            case Notifications.LEFT_SWIPE:
+                {
+                    CanMoving = false;
+                    break;
+                }
         }
+    }
+
+    private bool GetCanMoving()
+    {
+        Vector3 NewPosition = transform.position;
+        Destination = new Vector3(NewPosition.x, NewPosition.y + 1, NewPosition.z);
+        if (!LeanTween.isTweening(transform.parent.gameObject))
+        {
+            CanMoving = !Physics2D.Linecast(transform.position, Destination, ObstacleLayers);
+        }
+        return CanMoving;
     }
 
     private void StartMoving()
     {
-        Vector3 NewPosition = transform.position;
-        Destination = new Vector3(NewPosition.x, NewPosition.y + 1, NewPosition.z);
-        CanMoving = !Physics2D.Linecast(transform.position, Destination, ObstacleLayers);
-        if (CanMoving)
+        if (GetCanMoving())
         {
             transform.position = Destination;
             CanMoving = false;

@@ -7,6 +7,7 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         PlayerCollider.TriggerEvent += OnNotify;
+        UIManager.UIEvent += OnNotify;
     }
     private void OnNotify(Notifications notification)
     {
@@ -17,11 +18,20 @@ public class LevelManager : MonoBehaviour
                     RestartNotify();
                     break;
                 }
+            case Notifications.START_CLICK:
+                {
+                    StartNotify();
+                    break;
+                }
         }
     }
 
     public void RestartNotify()
     {
         LevelEvent(Notifications.LEVEL_RESTART);
+    }
+    public void StartNotify()
+    {
+        LevelEvent(Notifications.LEVEL_START);
     }
 }

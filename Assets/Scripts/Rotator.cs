@@ -32,9 +32,7 @@ public class Rotator : MonoBehaviour
 
     private void Rotate()
     {
-        if(!LeanTween.isTweening(gameObject))
-        LeanTween.rotateAroundLocal(gameObject, Vector3.forward, TempAngle, Speed).setEaseOutCubic();
+        if (!LeanTween.isTweening(gameObject))
+            LeanTween.rotateAroundLocal(gameObject, Vector3.forward, TempAngle, Speed).setEaseOutCubic();
     }
-
-
 }

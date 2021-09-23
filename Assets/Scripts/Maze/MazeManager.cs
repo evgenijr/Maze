@@ -52,6 +52,11 @@ public class MazeManager : MonoBehaviour
                     SetUpMaze();
                     break;
                 }
+            case Notifications.LEVEL_START:
+                {
+                    SetUpMaze();
+                    break;
+                }
         }
     }
 }
